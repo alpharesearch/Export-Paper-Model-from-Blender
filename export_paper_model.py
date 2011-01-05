@@ -18,26 +18,26 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software Foundation,
-# Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 #
 # ***** END GPL LICENCE BLOCK *****
 
 bl_addon_info = {
-    'name': 'Export: Paper Model',
-    'author': 'Addam Dominec',
-    'version': (0,7),
-    'blender': (2, 5, 5),
-    'api': 33903,
-    'location': 'File > Export > Paper Model',
-    'description': 'Export printable net of the selected mesh',
-    'category': 'Import/Export',
-    'wiki_url': 'http://wiki.blender.org/index.php/Extensions:2.5/Py/Scripts/File_I-O/Paper_Model',
-    'tracker_url': 'https://projects.blender.org/tracker/index.php?func=detail&aid=22417&group_id=153&atid=467'}
+	'name': 'Export: Paper Model',
+	'author': 'Addam Dominec',
+	'version': (0,7),
+	'blender': (2, 5, 5),
+	'api': 33903,
+	'location': 'File > Export > Paper Model',
+	'description': 'Export printable net of the selected mesh',
+	'category': 'Import/Export',
+	'wiki_url': 'http://wiki.blender.org/index.php/Extensions:2.5/Py/Scripts/File_I-O/Paper_Model',
+	'tracker_url': 'https://projects.blender.org/tracker/index.php?func=detail&aid=22417&group_id=153&atid=467'}
 
 """
 
 Additional links:
-    e-mail: adominec {at} gmail {dot} com
+	e-mail: adominec {at} gmail {dot} com
 
 """
 import bpy
@@ -508,7 +508,7 @@ class Mesh:
 			bpy.data.images.remove(image)
 		rd.bake_margin=recall_margin
 		rd.use_bake_clear=recall_clear
-   
+	 
 class Vertex:
 	"""BPy Vertex wrapper"""
 	def __init__(self, bpy_vertex, mesh=None, matrix=1):
@@ -934,7 +934,7 @@ class Island:
 			center_to_center = (uvedge_b.va.co + uvedge_b.vb.co - uvedge_a.va.co - uvedge_a.vb.co)/2
 			return center_to_center.length
 		island_faces = {True: set((uvface_a,)), #Faces visited from face A
-			False: set((uvface_b,))} #  or we can easily get ... from face B
+			False: set((uvface_b,))} #	or we can easily get ... from face B
 		flood = [ #Faces to visit next: distance, face, edge, is_from_a
 			(0, uvface_a, None, True),
 			(0, uvface_b, None, False)]
@@ -1250,21 +1250,73 @@ class SVG:
 		"""Write data to a file given by its name."""
 		for num, page in enumerate(self.mesh.pages):
 			with open(filename+"_"+page.name+".svg", 'w') as f:
-				f.write("<?xml version='1.0' encoding='UTF-8' standalone='no'?>")
-				f.write("<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' width='" + str(self.page_size.x) + "px' height='" + str(self.page_size.y) + "px'>")
-				f.write("""<style type="text/css">
-					path {fill:none; stroke-width:1px; stroke-linecap:square; stroke-linejoin:bevel; stroke-dasharray:none}
-					path.concave {stroke:#000; stroke-dasharray:8,4,2,4; stroke-dashoffset:0}
-					path.convex {stroke:#000; stroke-dasharray:4,8; stroke-dashoffset:0}
-					path.outer {stroke:#000; stroke-dasharray:none; stroke-width:1.5px}
-					path.background {stroke:#fff}
-					path.outer_background {stroke:#fff; stroke-width:2px}
-					path.sticker {fill: #fff; stroke: #000; fill-opacity: 0.4; stroke-opacity: 0.7}
-					rect {fill:#ccc; stroke:none}
-				</style>""")
+				f.write("""<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:cc="http://creativecommons.org/ns#"
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:svg="http://www.w3.org/2000/svg"
+xmlns="http://www.w3.org/2000/svg"
+xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+version="1.1"
+""")
+				f.write("width='" + str(self.page_size.x) + "px' height='" + str(self.page_size.y) + "px'")
+				f.write("""
+id="svg2"
+inkscape:version="0.48.0 r9654"
+sodipodi:docname="test_page1.svg">
+	<metadata
+		id="metadata34">
+	<rdf:RDF>
+		<cc:Work
+		 rdf:about="">
+		<dc:format>image/svg+xml</dc:format>
+		<dc:type
+		   rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+	  </cc:Work>
+	</rdf:RDF>
+  </metadata>
+  <defs
+	 id="defs32" />
+<sodipodi:namedview
+pagecolor="#ffffff"
+bordercolor="#666666"
+borderopacity="1"
+objecttolerance="10"
+gridtolerance="10"
+guidetolerance="10"
+inkscape:pageopacity="0"
+inkscape:pageshadow="2"
+inkscape:window-width="800"
+inkscape:window-height="600"
+id="namedview30"
+showgrid="false"
+inkscape:zoom="0.60086016"
+inkscape:cx="172.97782"
+inkscape:cy="305.99951"
+inkscape:window-x="0"
+inkscape:window-y="24"
+inkscape:window-maximized="1"
+inkscape:current-layer="layer1" />
+<style type="text/css">
+path {fill:none; stroke-width:1px; stroke-linecap:square; stroke-linejoin:bevel; stroke-dasharray:none}
+path.concave {stroke:#000; stroke-dasharray:8,4,2,4; stroke-dashoffset:0}
+path.convex {stroke:#000; stroke-dasharray:4,8; stroke-dashoffset:0}
+path.outer {stroke:#000; stroke-dasharray:none; stroke-width:1.5px}
+path.background {stroke:#fff}
+path.outer_background {stroke:#fff; stroke-width:2px}
+path.sticker {fill: #fff; stroke: #000; fill-opacity: 0.4; stroke-opacity: 0.7}
+rect {fill:#ccc; stroke:none}
+</style>""")
 				if not self.pure_net:
 					f.write("<image x='0' y='0' width='" + str(self.page_size.x) + "' height='" + str(self.page_size.y) + "' xlink:href='file://" + filename + "_" + page.name + ".png'/>")
-				f.write("<g>")
+				f.write("""<g
+inkscape:groupmode="layer"
+id="layer1"
+inkscape:label="print"
+style="display:inline">
+""")
 				for island in page.islands:
 					f.write("<g>")
 					rot = M.Matrix.Rotation(island.angle, 2)
@@ -1288,7 +1340,12 @@ class SVG:
 					#	data_stickers+="\nM "+" L ".join([self.format_vertex(vertex.co, rot, island.pos+island.offset) for vertex in sticker.verts])
 					#if data_stickers: f.write("<path class='sticker' d='"+data_stickers+"'/>")
 					if len(island.stickers) > 0:
-						f.write("<g>")
+						f.write("""<g
+inkscape:groupmode="layer"
+id="layer2"
+inkscape:label="cut"
+style="display:none">
+""")
 						for sticker in island.stickers: #Stickers are separate paths in one group
 							f.write("<path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " Z'/>")
 						f.write("</g>")
@@ -1356,7 +1413,7 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 	output_pure = bpy.props.BoolProperty(name="Pure Net", description="Do not bake the bitmap", default=True)
 	bake_selected_to_active = bpy.props.BoolProperty(name="Selected to Active", description="Bake selected to active (if not exporting pure net)", default=True)
 	sticker_width = bpy.props.FloatProperty(name="Tab Size", description="Width of gluing tabs", default=0.005, soft_min=0, soft_max=0.05, subtype="UNSIGNED", unit="LENGTH")
-	model_scale = bpy.props.FloatProperty(name="Scale", description="Coefficient of all dimensions when exporting", default=1, soft_min=0.001, soft_max=10, subtype="FACTOR")
+	model_scale = bpy.props.FloatProperty(name="Scale", description="Coefficient of all dimensions when exporting", default=0.03, soft_min=0.001, soft_max=10, subtype="FACTOR")
 	unfolder=None
 	largest_island_ratio=0
 	
