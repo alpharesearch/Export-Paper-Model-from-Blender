@@ -1361,10 +1361,10 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 	default_paper_select = bpy.props.EnumProperty( name = "Defaults", items = default_paper_sizes, description = "Choose a default paper size" )
 	output_size_x = bpy.props.FloatProperty(name="Page Size X", description="Page width", default=0.210, soft_min=0.105, soft_max=0.841, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
 	output_size_y = bpy.props.FloatProperty(name="Page Size Y", description="Page height", default=0.297, soft_min=0.148, soft_max=1.189, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
-	margin_top = bpy.props.FloatProperty(name="Margin Top", description="Page width", default=0.040, soft_min=0.0, soft_max=0.841, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
-	margin_bottom = bpy.props.FloatProperty(name="Margin_Bottom", description="Page height", default=0.01, soft_min=0.0, soft_max=1.189, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
-	margin_right = bpy.props.FloatProperty(name="Margin_Right", description="Page width", default=0.015, soft_min=0.0, soft_max=0.841, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
-	margin_left = bpy.props.FloatProperty(name="Margin_Left", description="Page height", default=0.015, soft_min=0.0, soft_max=1.189, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	margin_top = bpy.props.FloatProperty(name="Margin Top", description="Page width", default=0.0, soft_min=0.0, soft_max=0.841, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	margin_bottom = bpy.props.FloatProperty(name="Margin_Bottom", description="Page height", default=0.0, soft_min=0.0, soft_max=1.189, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	margin_right = bpy.props.FloatProperty(name="Margin_Right", description="Page width", default=0.0, soft_min=0.0, soft_max=0.841, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	margin_left = bpy.props.FloatProperty(name="Margin_Left", description="Page height", default=0.0, soft_min=0.0, soft_max=1.189, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
 	output_dpi = bpy.props.FloatProperty(name="Unfolder DPI", description="Output resolution in points per inch", default=90, soft_min=30, soft_max=600, step=100 ,subtype="UNSIGNED")
 	output_pure = bpy.props.BoolProperty(name="Pure Net", description="Do not bake the bitmap", default=True)
 	bake_selected_to_active = bpy.props.BoolProperty(name="Selected to Active", description="Bake selected to active (if not exporting pure net)", default=True)
@@ -1403,15 +1403,54 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 		col.label(text="Page size:")
 		#do nothing at default_paper_select == "0":
 		if self.properties.default_paper_select == "1":
-			print ("test")
-			self.properties.output_size_x = 0.1
-			self.properties.output_size_y = 0.1
-			self.properties.margin_top = 0.1
-			self.properties.margin_bottom = 0.1
-			self.properties.margin_right = 0.1
-			self.properties.margin_left = 0.1
+			self.properties.output_size_x = 0.210
+			self.properties.output_size_y = 0.297
+			self.properties.margin_top = 0.005
+			self.properties.margin_bottom = 0.005
+			self.properties.margin_right = 0.005
+			self.properties.margin_left = 0.005
 		elif self.properties.default_paper_select == "2":
-			print ("tes2")
+			self.properties.output_size_x = 0.297
+			self.properties.output_size_y = 0.420
+			self.properties.margin_top = 0.005
+			self.properties.margin_bottom = 0.005
+			self.properties.margin_right = 0.005
+			self.properties.margin_left = 0.005
+		elif self.properties.default_paper_select == "3":
+			self.properties.output_size_x = 0.216
+			self.properties.output_size_y = 0.279
+			self.properties.margin_top = 0.005
+			self.properties.margin_bottom = 0.005
+			self.properties.margin_right = 0.005
+			self.properties.margin_left = 0.005
+		elif self.properties.default_paper_select == "4":
+			self.properties.output_size_x = 0.216
+			self.properties.output_size_y = 0.356
+			self.properties.margin_top = 0.005
+			self.properties.margin_bottom = 0.005
+			self.properties.margin_right = 0.005
+			self.properties.margin_left = 0.005
+		elif self.properties.default_paper_select == "5":
+			self.properties.output_size_x = 0.210
+			self.properties.output_size_y = 0.297
+			self.properties.margin_top = 0.027
+			self.properties.margin_bottom = 0.015
+			self.properties.margin_right = 0.010
+			self.properties.margin_left = 0.015
+		elif self.properties.default_paper_select == "6":
+			self.properties.output_size_x = 0.216
+			self.properties.output_size_y = 0.279
+			self.properties.margin_top = 0.029
+			self.properties.margin_bottom = 0.015
+			self.properties.margin_right = 0.010
+			self.properties.margin_left = 0.021
+		elif self.properties.default_paper_select == "7":
+			self.properties.output_size_x = 0.216
+			self.properties.output_size_y = 0.356
+			self.properties.margin_top = 0.029
+			self.properties.margin_bottom = 0.015
+			self.properties.margin_right = 0.010
+			self.properties.margin_left = 0.021
 		col.prop(self.properties, "default_paper_select")
 		col.prop(self.properties, "output_size_x")
 		col.prop(self.properties, "output_size_y")
