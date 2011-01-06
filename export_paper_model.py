@@ -1350,17 +1350,26 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 	filepath = bpy.props.StringProperty(name="File Path", description="Target file to save the SVG")
 	filename = bpy.props.StringProperty(name="File Name", description="Name of the file")
 	directory = bpy.props.StringProperty(name="Directory", description="Directory of the file")
-	output_size_x = bpy.props.FloatProperty(name="Page Size X", description="Page width", default=0.210, soft_min=0.105, soft_max=0.841, subtype="UNSIGNED", unit="LENGTH")
-	output_size_y = bpy.props.FloatProperty(name="Page Size Y", description="Page height", default=0.297, soft_min=0.148, soft_max=1.189, subtype="UNSIGNED", unit="LENGTH")
-	margin_top = bpy.props.FloatProperty(name="Margin Top", description="Page width", default=0.040, soft_min=0.0, soft_max=0.841, subtype="UNSIGNED", unit="LENGTH")
-	margin_bottom = bpy.props.FloatProperty(name="Margin_Bottom", description="Page height", default=0.01, soft_min=0.0, soft_max=1.189, subtype="UNSIGNED", unit="LENGTH")
-	margin_right = bpy.props.FloatProperty(name="Margin_Right", description="Page width", default=0.015, soft_min=0.0, soft_max=0.841, subtype="UNSIGNED", unit="LENGTH")
-	margin_left = bpy.props.FloatProperty(name="Margin_Left", description="Page height", default=0.015, soft_min=0.0, soft_max=1.189, subtype="UNSIGNED", unit="LENGTH")
-	output_dpi = bpy.props.FloatProperty(name="Unfolder DPI", description="Output resolution in points per inch", default=90, min=1, soft_min=30, soft_max=600, subtype="UNSIGNED")
+	default_paper_sizes = [ ( "0" , "User defined", "User defined paper size" ),
+							( "1" , "A4", "International standard paper size" ), 
+							( "2" , "A3", "International standard paper size" ),
+							( "3" , "Letter", "North American paper size" ),  
+							( "4" , "Legal", "North American paper size" ),
+							( "5" , "A4 RegMarks", "Add registration marks for cutting plotters" ), 
+							( "6" , "Letter RegMarks", "Add registration marks for cutting plotters" ),  
+							( "7" , "Legal RegMarks", "Add registration marks for cutting plotters" )]
+	default_paper_select = bpy.props.EnumProperty( name = "Defaults", items = default_paper_sizes, description = "Choose a default paper size" )
+	output_size_x = bpy.props.FloatProperty(name="Page Size X", description="Page width", default=0.210, soft_min=0.105, soft_max=0.841, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	output_size_y = bpy.props.FloatProperty(name="Page Size Y", description="Page height", default=0.297, soft_min=0.148, soft_max=1.189, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	margin_top = bpy.props.FloatProperty(name="Margin Top", description="Page width", default=0.040, soft_min=0.0, soft_max=0.841, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	margin_bottom = bpy.props.FloatProperty(name="Margin_Bottom", description="Page height", default=0.01, soft_min=0.0, soft_max=1.189, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	margin_right = bpy.props.FloatProperty(name="Margin_Right", description="Page width", default=0.015, soft_min=0.0, soft_max=0.841, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	margin_left = bpy.props.FloatProperty(name="Margin_Left", description="Page height", default=0.015, soft_min=0.0, soft_max=1.189, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	output_dpi = bpy.props.FloatProperty(name="Unfolder DPI", description="Output resolution in points per inch", default=90, soft_min=30, soft_max=600, step=100 ,subtype="UNSIGNED")
 	output_pure = bpy.props.BoolProperty(name="Pure Net", description="Do not bake the bitmap", default=True)
 	bake_selected_to_active = bpy.props.BoolProperty(name="Selected to Active", description="Bake selected to active (if not exporting pure net)", default=True)
-	sticker_width = bpy.props.FloatProperty(name="Tab Size", description="Width of gluing tabs", default=0.005, soft_min=0, soft_max=0.05, subtype="UNSIGNED", unit="LENGTH")
-	model_scale = bpy.props.FloatProperty(name="Scale", description="Coefficient of all dimensions when exporting", default=1, soft_min=0.001, soft_max=10, subtype="FACTOR")
+	sticker_width = bpy.props.FloatProperty(name="Tab Size", description="Width of gluing tabs", default=0.005, soft_min=0, soft_max=0.05, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
+	model_scale = bpy.props.FloatProperty(name="Scale", description="Coefficient of all dimensions when exporting", default=0.03, soft_min=0.001 ,soft_max=10, precision=3, step=0.01, subtype="FACTOR")
 	unfolder=None
 	largest_island_ratio=0
 	
@@ -1392,6 +1401,18 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 		layout = self.layout
 		col = layout.column(align=True)
 		col.label(text="Page size:")
+		#do nothing at default_paper_select == "0":
+		if self.properties.default_paper_select == "1":
+			print ("test")
+			self.properties.output_size_x = 0.1
+			self.properties.output_size_y = 0.1
+			self.properties.margin_top = 0.1
+			self.properties.margin_bottom = 0.1
+			self.properties.margin_right = 0.1
+			self.properties.margin_left = 0.1
+		elif self.properties.default_paper_select == "2":
+			print ("tes2")
+		col.prop(self.properties, "default_paper_select")
 		col.prop(self.properties, "output_size_x")
 		col.prop(self.properties, "output_size_y")
 		col.prop(self.properties, "margin_top")
