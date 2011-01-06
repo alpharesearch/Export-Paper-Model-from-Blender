@@ -1263,8 +1263,8 @@ class SVG:
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
 """)
-				f.write("   width='" + str(self.page_size.x) + "px'")
-				f.write("   height='" + str(self.page_size.y) + "px'")
+				f.write("   width='" + str(self.page_size.x) + "px'\n")
+				f.write("   height='" + str(self.page_size.y) + "px'\n")
 				f.write("""   id="svg2"
    version="1.1"
    inkscape:version="0.48.0 r9654"
@@ -1488,8 +1488,8 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 	filepath = bpy.props.StringProperty(name="File Path", description="Target file to save the SVG")
 	filename = bpy.props.StringProperty(name="File Name", description="Name of the file")
 	directory = bpy.props.StringProperty(name="Directory", description="Directory of the file")
-	output_size_x = bpy.props.FloatProperty(name="Page Size X", description="Page width", default=0.210, soft_min=0.105, soft_max=0.841, subtype="UNSIGNED", unit="LENGTH")
-	output_size_y = bpy.props.FloatProperty(name="Page Size Y", description="Page height", default=0.297, soft_min=0.148, soft_max=1.189, subtype="UNSIGNED", unit="LENGTH")
+	output_size_x = bpy.props.FloatProperty(name="Page Size X", description="Page width", default=0.216, soft_min=0.105, soft_max=0.841, subtype="UNSIGNED", unit="LENGTH")
+	output_size_y = bpy.props.FloatProperty(name="Page Size Y", description="Page height", default=0.279, soft_min=0.148, soft_max=1.189, subtype="UNSIGNED", unit="LENGTH")
 	output_dpi = bpy.props.FloatProperty(name="Unfolder DPI", description="Output resolution in points per inch", default=90, min=1, soft_min=30, soft_max=600, subtype="UNSIGNED")
 	output_pure = bpy.props.BoolProperty(name="Pure Net", description="Do not bake the bitmap", default=True)
 	bake_selected_to_active = bpy.props.BoolProperty(name="Selected to Active", description="Bake selected to active (if not exporting pure net)", default=True)
