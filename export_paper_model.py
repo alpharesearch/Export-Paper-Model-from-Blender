@@ -1251,81 +1251,84 @@ class SVG:
 		for num, page in enumerate(self.mesh.pages):
 			with open(filename+"_"+page.name+".svg", 'w') as f:
 				f.write("""<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Export-Paper-Model-from-Blender (https://github.com/addam/Export-Paper-Model-from-Blender) -->
+
 <svg
-xmlns:dc="http://purl.org/dc/elements/1.1/"
-xmlns:cc="http://creativecommons.org/ns#"
-xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-xmlns:svg="http://www.w3.org/2000/svg"
-xmlns="http://www.w3.org/2000/svg"
-xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-version="1.1"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
 """)
-				f.write("width='" + str(self.page_size.x) + "px' height='" + str(self.page_size.y) + "px'")
-				f.write("""
-id="svg2"
-inkscape:version="0.48.0 r9654"
-sodipodi:docname="test_page1.svg">
-	<metadata
-		id="metadata34">
-	<rdf:RDF>
-		<cc:Work
-		 rdf:about="">
-		<dc:format>image/svg+xml</dc:format>
-		<dc:type
-		   rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-	  </cc:Work>
-	</rdf:RDF>
-  </metadata>
+				f.write("   width='" + str(self.page_size.x) + "px'")
+				f.write("   height='" + str(self.page_size.y) + "px'")
+				f.write("""   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="drawing.svg">
   <defs
-	 id="defs32" />
-<sodipodi:namedview
-pagecolor="#ffffff"
-bordercolor="#666666"
-borderopacity="1"
-objecttolerance="10"
-gridtolerance="10"
-guidetolerance="10"
-inkscape:pageopacity="0"
-inkscape:pageshadow="2"
-inkscape:window-width="800"
-inkscape:window-height="600"
-id="namedview30"
-showgrid="false"
-inkscape:zoom="0.60086016"
-inkscape:cx="172.97782"
-inkscape:cy="305.99951"
-inkscape:window-x="0"
-inkscape:window-y="24"
-inkscape:window-maximized="1"
-inkscape:current-layer="layer1" />
-<style type="text/css">
-path {fill:none; stroke-width:1px; stroke-linecap:square; stroke-linejoin:bevel; stroke-dasharray:none}
-path.concave {stroke:#000; stroke-dasharray:8,4,2,4; stroke-dashoffset:0}
-path.convex {stroke:#000; stroke-dasharray:4,8; stroke-dashoffset:0}
-path.outer {stroke:#000; stroke-dasharray:none; stroke-width:1.5px}
-path.background {stroke:#fff}
-path.outer_background {stroke:#fff; stroke-width:2px}
-path.sticker {fill: #fff; stroke: #000; fill-opacity: 0.4; stroke-opacity: 0.7}
-rect {fill:#ccc; stroke:none}
-</style>""")
-				if not self.pure_net:
-					f.write("<image x='0' y='0' width='" + str(self.page_size.x) + "' height='" + str(self.page_size.y) + "' xlink:href='file://" + filename + "_" + page.name + ".png'/>")
-				f.write("""<g
-inkscape:groupmode="layer"
-id="layer1"
-inkscape:label="print"
-style="display:inline">
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="735"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer3"
+     showgrid="false"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     inkscape:window-x="50"
+     inkscape:window-y="50"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <style type="text/css">
+    path {fill:none; stroke-width:1px; stroke-linecap:square; stroke-linejoin:bevel; stroke-dasharray:none}
+    path.concave {stroke:#000; stroke-dasharray:8,4,2,4; stroke-dashoffset:0}
+    path.convex {stroke:#000; stroke-dasharray:4,8; stroke-dashoffset:0}
+    path.outer {stroke:#000; stroke-dasharray:none; stroke-width:1.5px}
+    path.background {stroke:#fff}
+    path.outer_background {stroke:#fff; stroke-width:2px}
+    path.sticker {fill: #fff; stroke: #000; fill-opacity: 0.4; stroke-opacity: 0.7}
+    rect {fill:#ccc; stroke:none}
+  </style>
 """)
+				if not self.pure_net:
+					f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer1"
+    inkscape:label="background"
+    style="display:inline">
+""")
+					f.write("    <image x='0' y='0' width='" + str(self.page_size.x) + "' height='" + str(self.page_size.y) + "' xlink:href='file://" + filename + "_" + page.name + ".png'/>\n")
+					f.write("  </g>\n")
 				for island in page.islands:
-					f.write("<g>")
 					rot = M.Matrix.Rotation(island.angle, 2)
 					#debug: bounding box
 					#f.write("<rect x='"+str(island.pos.x*self.size)+"' y='"+str(self.page_size.y-island.pos.y*self.size-island.bounding_box.y*self.size)+"' width='"+str(island.bounding_box.x*self.size)+"' height='"+str(island.bounding_box.y*self.size)+"' />")
 					line_through = " L ".join
 					data_outer = data_convex = data_concave = data_stickers = ""
 					for uvedge in island.edges:
-						data_uvedge = "\nM " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in [uvedge.va, uvedge.vb]])
+						data_uvedge = "\n    M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in [uvedge.va, uvedge.vb]])
 						#FIXME: The following clause won't return correct results for uncut edges with more than two faces connected
 						if uvedge.edge.is_cut(uvedge.uvface.face):
 							data_outer += data_uvedge
@@ -1340,26 +1343,31 @@ style="display:inline">
 					#	data_stickers+="\nM "+" L ".join([self.format_vertex(vertex.co, rot, island.pos+island.offset) for vertex in sticker.verts])
 					#if data_stickers: f.write("<path class='sticker' d='"+data_stickers+"'/>")
 					if len(island.stickers) > 0:
-						f.write("""<g
-inkscape:groupmode="layer"
-id="layer2"
-inkscape:label="cut"
-style="display:none">
+						f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer2"
+    inkscape:label="stickers"
+    style="display:inline">
 """)
 						for sticker in island.stickers: #Stickers are separate paths in one group
-							f.write("<path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " Z'/>")
-						f.write("</g>")
+							f.write("  <path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " Z'/>\n")
+						f.write("  </g>\n")
+					f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer3"
+    inkscape:label="cut line"
+    style="display:inline">
+""")
 					if data_outer: 
 						if not self.pure_net:
-							f.write("<path class='outer_background' d='" + data_outer + "'/>")
-						f.write("<path class='outer' d='" + data_outer + "'/>")
+							f.write("  <path class='outer_background' d='" + data_outer + "'/>\n")
+						f.write("  <path class='outer' d='" + data_outer + "'/>\n")
 					if not self.pure_net and (data_convex or data_concave):
-						f.write("<path class='background' d='" + data_convex + data_concave + "'/>")
-					if data_convex: f.write("<path class='convex' d='" + data_convex+"'/>")
-					if data_concave: f.write("<path class='concave' d='" + data_concave+"'/>")
-					f.write("</g>")
-				f.write("</g>")
-				f.write("</svg>")
+						f.write("  <path class='background' d='" + data_convex + data_concave + "'/>\n")
+					if data_convex: f.write("  <path class='convex' d='" + data_convex+"'/>\n")
+					if data_concave: f.write("  <path class='concave' d='" + data_concave+"'/>\n")
+				f.write("  </g>\n")
+				f.write("</svg>\n")
 				f.close()
 
 class MESH_OT_make_unfoldable(bpy.types.Operator):
