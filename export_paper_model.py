@@ -1323,7 +1323,7 @@ class SVG:
 					f.write("    <image x='0' y='0' width='" + str(self.page_size.x) + "' height='" + str(self.page_size.y) + "' xlink:href='file://" + filename + "_" + page.name + ".png'/>\n")
 					f.write("  </g>\n")
 				f.write("""  <g
-     inkscape:label="RegMarks"
+     inkscape:label="reg marks"
      inkscape:groupmode="layer"
      id="layer2"
      transform="translate(0.34375,-62.718738)"
@@ -1353,8 +1353,10 @@ class SVG:
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 52.805856,237.58488 0,-70.86614 70.866144,0"
-       id="path3867"
+""")
+				#f.write("       d='m 52.805856,237.58488 0,-70.86614 70.866144,0'\n") #letter
+				f.write("       d='m 52.805856,166.8919 0,-70.866141 70.866144,0'\n") #A4
+				f.write("""       id="path3867"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1421,7 +1423,7 @@ class SVG:
     inkscape:groupmode="layer"
     id="layer3"
     inkscape:label="stickers closed"
-    style="display:inline">
+    style="display:none">
 """)
 						for sticker in island.stickers: #Stickers are separate paths in one group
 							f.write("  <path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " Z'/>\n")
@@ -1438,7 +1440,7 @@ class SVG:
 					f.write("""  <g
     inkscape:groupmode="layer"
     id="layer5"
-    inkscape:label="cut line"
+    inkscape:label="object outline"
     style="display:inline">
 """)
 					if data_outer: 
