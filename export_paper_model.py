@@ -18,26 +18,26 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software Foundation,
-# Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 #
 # ***** END GPL LICENCE BLOCK *****
 
 bl_addon_info = {
-    'name': 'Export: Paper Model',
-    'author': 'Addam Dominec',
-    'version': (0,7),
-    'blender': (2, 5, 5),
-    'api': 33903,
-    'location': 'File > Export > Paper Model',
-    'description': 'Export printable net of the selected mesh',
-    'category': 'Import/Export',
-    'wiki_url': 'http://wiki.blender.org/index.php/Extensions:2.5/Py/Scripts/File_I-O/Paper_Model',
-    'tracker_url': 'https://projects.blender.org/tracker/index.php?func=detail&aid=22417&group_id=153&atid=467'}
+	'name': 'Export: Paper Model',
+	'author': 'Addam Dominec',
+	'version': (0,7),
+	'blender': (2, 5, 5),
+	'api': 33903,
+	'location': 'File > Export > Paper Model',
+	'description': 'Export printable net of the selected mesh',
+	'category': 'Import/Export',
+	'wiki_url': 'http://wiki.blender.org/index.php/Extensions:2.5/Py/Scripts/File_I-O/Paper_Model',
+	'tracker_url': 'https://projects.blender.org/tracker/index.php?func=detail&aid=22417&group_id=153&atid=467'}
 
 """
 
 Additional links:
-    e-mail: adominec {at} gmail {dot} com
+	e-mail: adominec {at} gmail {dot} com
 
 """
 import bpy
@@ -508,7 +508,7 @@ class Mesh:
 			bpy.data.images.remove(image)
 		rd.bake_margin=recall_margin
 		rd.use_bake_clear=recall_clear
-   
+	 
 class Vertex:
 	"""BPy Vertex wrapper"""
 	def __init__(self, bpy_vertex, mesh=None, matrix=1):
@@ -934,7 +934,7 @@ class Island:
 			center_to_center = (uvedge_b.va.co + uvedge_b.vb.co - uvedge_a.va.co - uvedge_a.vb.co)/2
 			return center_to_center.length
 		island_faces = {True: set((uvface_a,)), #Faces visited from face A
-			False: set((uvface_b,))} #  or we can easily get ... from face B
+			False: set((uvface_b,))} #	or we can easily get ... from face B
 		flood = [ #Faces to visit next: distance, face, edge, is_from_a
 			(0, uvface_a, None, True),
 			(0, uvface_b, None, False)]
@@ -1250,30 +1250,158 @@ class SVG:
 		"""Write data to a file given by its name."""
 		for num, page in enumerate(self.mesh.pages):
 			with open(filename+"_"+page.name+".svg", 'w') as f:
-				f.write("<?xml version='1.0' encoding='UTF-8' standalone='no'?>")
-				f.write("<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' width='" + str(self.page_size.x) + "px' height='" + str(self.page_size.y) + "px'>")
-				f.write("""<style type="text/css">
-					path {fill:none; stroke-width:1px; stroke-linecap:square; stroke-linejoin:bevel; stroke-dasharray:none}
-					path.concave {stroke:#000; stroke-dasharray:8,4,2,4; stroke-dashoffset:0}
-					path.convex {stroke:#000; stroke-dasharray:4,8; stroke-dashoffset:0}
-					path.outer {stroke:#000; stroke-dasharray:none; stroke-width:1.5px}
-					path.background {stroke:#fff}
-					path.outer_background {stroke:#fff; stroke-width:2px}
-					path.sticker {fill: #fff; stroke: #000; fill-opacity: 0.4; stroke-opacity: 0.7}
-					rect {fill:#ccc; stroke:none}
-				</style>""")
+				f.write("""<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Export-Paper-Model-from-Blender (https://github.com/addam/Export-Paper-Model-from-Blender) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+""")
+				f.write("   width='" + str(self.page_size.x) + "px'\n")
+				f.write("   height='" + str(self.page_size.y) + "px'\n")
+				f.write("""   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="drawing.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="735"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer4"
+     showgrid="false"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     inkscape:window-x="50"
+     inkscape:window-y="50"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <style type="text/css">
+    path {fill:none; stroke-width:1px; stroke-linecap:square; stroke-linejoin:bevel; stroke-dasharray:none}
+    path.concave {stroke:#000; stroke-dasharray:8,4,2,4; stroke-dashoffset:0}
+    path.convex {stroke:#000; stroke-dasharray:4,8; stroke-dashoffset:0}
+    path.outer {stroke:#000; stroke-dasharray:none; stroke-width:1.5px}
+    path.background {stroke:#fff}
+    path.outer_background {stroke:#fff; stroke-width:2px}
+    path.sticker {fill: #fff; stroke: #000; fill-opacity: 0.4; stroke-opacity: 0.7}
+    rect {fill:#ccc; stroke:none}
+  </style>
+""")
 				if not self.pure_net:
-					f.write("<image x='0' y='0' width='" + str(self.page_size.x) + "' height='" + str(self.page_size.y) + "' xlink:href='file://" + filename + "_" + page.name + ".png'/>")
-				f.write("<g>")
+					f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer1"
+    inkscape:label="background"
+    style="display:inline">
+""")
+					f.write("    <image x='0' y='0' width='" + str(self.page_size.x) + "' height='" + str(self.page_size.y) + "' xlink:href='file://" + filename + "_" + page.name + ".png'/>\n")
+					f.write("  </g>\n")
+				f.write("""  <g
+     inkscape:label="RegMarks"
+     inkscape:groupmode="layer"
+     id="layer2"
+     transform="translate(0.34375,-62.718738)"
+     style="display:none"
+     sodipodi:insensitive="true">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 52.805856,1017.3959 70.866144,0"
+       id="path3005"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 52.805856,946.52976 0,70.86614"
+       id="path3005-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 690.08145,1017.3959 -70.62992,0"
+       id="path3005-2"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 690.31767,946.52976 0,70.86614"
+       id="path3005-3-3"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 52.805856,237.58488 0,-70.86614 70.866144,0"
+       id="path3867"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 566.92913,936.85039 0,35.43307"
+       id="path4780"
+       inkscape:connector-curvature="0"
+       transform="translate(-0.34375,62.718738)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 584.64567,954.56693 566.92913,972.28346 549.2126,954.56693"
+       id="path4782"
+       inkscape:connector-curvature="0"
+       transform="translate(-0.34375,62.718738)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 177.16535,936.85039 0,35.43307 17.71654,-17.71653"
+       id="path4784"
+       inkscape:connector-curvature="0"
+       transform="translate(-0.34375,62.718738)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 177.16535,972.28346 159.44882,954.56693"
+       id="path4786"
+       inkscape:connector-curvature="0"
+       transform="translate(-0.34375,62.718738)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline"
+       id="path3222"
+       sodipodi:cx="97.440948"
+       sodipodi:cy="874.84253"
+       sodipodi:rx="8.8582678"
+       sodipodi:ry="8.8582678"
+       d="m 93.771486,882.90503 c -4.452798,-2.02659 -6.419629,-7.27917 -4.39304,-11.73196 2.026588,-4.4528 7.279168,-6.41963 11.731964,-4.39304 4.4528,2.02658 6.41963,7.27916 4.39304,11.73196 -2.00539,4.40622 -7.176667,6.38641 -11.612113,4.44652"
+       sodipodi:start="1.9979057"
+       sodipodi:end="8.2662751"
+       sodipodi:open="true"
+       transform="matrix(0.7570818,0,0,0.75708471,43.235358,291.4589)" />
+  </g>
+""")
 				for island in page.islands:
-					f.write("<g>")
 					rot = M.Matrix.Rotation(island.angle, 2)
 					#debug: bounding box
 					#f.write("<rect x='"+str(island.pos.x*self.size)+"' y='"+str(self.page_size.y-island.pos.y*self.size-island.bounding_box.y*self.size)+"' width='"+str(island.bounding_box.x*self.size)+"' height='"+str(island.bounding_box.y*self.size)+"' />")
 					line_through = " L ".join
 					data_outer = data_convex = data_concave = data_stickers = ""
 					for uvedge in island.edges:
-						data_uvedge = "\nM " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in [uvedge.va, uvedge.vb]])
+						data_uvedge = "\n    M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in [uvedge.va, uvedge.vb]])
 						#FIXME: The following clause won't return correct results for uncut edges with more than two faces connected
 						if uvedge.edge.is_cut(uvedge.uvface.face):
 							data_outer += data_uvedge
@@ -1288,21 +1416,31 @@ class SVG:
 					#	data_stickers+="\nM "+" L ".join([self.format_vertex(vertex.co, rot, island.pos+island.offset) for vertex in sticker.verts])
 					#if data_stickers: f.write("<path class='sticker' d='"+data_stickers+"'/>")
 					if len(island.stickers) > 0:
-						f.write("<g>")
+						f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer3"
+    inkscape:label="stickers"
+    style="display:inline">
+""")
 						for sticker in island.stickers: #Stickers are separate paths in one group
-							f.write("<path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " Z'/>")
-						f.write("</g>")
+							f.write("  <path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " Z'/>\n")
+						f.write("  </g>\n")
+					f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer4"
+    inkscape:label="cut line"
+    style="display:inline">
+""")
 					if data_outer: 
 						if not self.pure_net:
-							f.write("<path class='outer_background' d='" + data_outer + "'/>")
-						f.write("<path class='outer' d='" + data_outer + "'/>")
+							f.write("  <path class='outer_background' d='" + data_outer + "'/>\n")
+						f.write("  <path class='outer' d='" + data_outer + "'/>\n")
 					if not self.pure_net and (data_convex or data_concave):
-						f.write("<path class='background' d='" + data_convex + data_concave + "'/>")
-					if data_convex: f.write("<path class='convex' d='" + data_convex+"'/>")
-					if data_concave: f.write("<path class='concave' d='" + data_concave+"'/>")
-					f.write("</g>")
-				f.write("</g>")
-				f.write("</svg>")
+						f.write("  <path class='background' d='" + data_convex + data_concave + "'/>\n")
+					if data_convex: f.write("  <path class='convex' d='" + data_convex+"'/>\n")
+					if data_concave: f.write("  <path class='concave' d='" + data_concave+"'/>\n")
+				f.write("  </g>\n")
+				f.write("</svg>\n")
 				f.close()
 
 class MESH_OT_make_unfoldable(bpy.types.Operator):
