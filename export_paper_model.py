@@ -308,6 +308,7 @@ class Mesh:
 			return uvedge.va.co.y
 		for edge in self.edges.values():
 			if edge.is_cut() and len(edge.uvedges) >= 2:
+				#TODO alpharesearch: need to add second sticker layer
 				if uvedge_priority(edge.uvedges[0]) >= uvedge_priority(edge.uvedges[1]):
 					edge.uvedges[0].island.add(Sticker(edge.uvedges[0], default_width))
 				else:
@@ -1282,7 +1283,7 @@ class SVG:
      inkscape:cx="735"
      inkscape:cy="520"
      inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer5"
      showgrid="false"
      inkscape:window-width="640"
      inkscape:window-height="480"
@@ -1419,15 +1420,24 @@ class SVG:
 						f.write("""  <g
     inkscape:groupmode="layer"
     id="layer3"
-    inkscape:label="stickers"
+    inkscape:label="stickers closed"
     style="display:inline">
 """)
 						for sticker in island.stickers: #Stickers are separate paths in one group
 							f.write("  <path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " Z'/>\n")
 						f.write("  </g>\n")
-					f.write("""  <g
+						f.write("""  <g
     inkscape:groupmode="layer"
     id="layer4"
+    inkscape:label="stickers open"
+    style="display:inline">
+""")
+						for sticker in island.stickers: #Stickers are separate paths in one group
+							f.write("  <path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " '/>\n")
+						f.write("  </g>\n")
+					f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer5"
     inkscape:label="cut line"
     style="display:inline">
 """)
