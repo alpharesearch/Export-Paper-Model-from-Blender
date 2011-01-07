@@ -1325,9 +1325,14 @@ class SVG:
 					f.write("  </g>\n")
 				if self.reg_mark == "5" or self.reg_mark == "6" or self.reg_mark == "7":
 					f.write("""  <g
-     inkscape:label="RegMarks"
+     inkscape:label="reg marks"
      inkscape:groupmode="layer"
      id="layer2"
+""")
+				if self.reg_mark == "5": f.write("       transform='translate(0.34375,-0.35648928)'\n") #A4
+				elif self.reg_mark == "6": f.write("     transform='translate(0.34375,-62.718738)'\n") #letter
+				elif self.reg_mark == "7": f.write("     transform='translate(0.34375,-62.718738)'\n") #legal 310mm
+				f.write("""
      transform="translate(0.34375,-62.718738)"
      style="display:none"
      sodipodi:insensitive="true">
@@ -1355,8 +1360,11 @@ class SVG:
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 52.805856,237.58488 0,-70.86614 70.866144,0"
-       id="path3867"
+""")
+				if self.reg_mark == "5": f.write("       d='m 52.805856,166.8919 0,-70.866141 70.866144,0'\n") #A4 240mm
+				elif self.reg_mark == "6": f.write("       d='m 52.805856,237.58488 0,-70.86614 70.866144,0'\n") #letter 260mm
+				elif self.reg_mark == "7": f.write("       d='m 52.805856,243.42743 0,-70.86614 70.866144,0'\n") #legal 310mm
+				f.write("""       id="path3867"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1423,7 +1431,7 @@ class SVG:
     inkscape:groupmode="layer"
     id="layer3"
     inkscape:label="stickers closed"
-    style="display:inline">
+    style="display:none">
 """)
 						for sticker in island.stickers: #Stickers are separate paths in one group
 							f.write("  <path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " Z'/>\n")
@@ -1440,7 +1448,7 @@ class SVG:
 					f.write("""  <g
     inkscape:groupmode="layer"
     id="layer5"
-    inkscape:label="cut line"
+    inkscape:label="object outline"
     style="display:inline">
 """)
 					if data_outer: 
@@ -1597,7 +1605,7 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 		elif self.properties.default_paper_select == "7":
 			self.properties.output_size_x = 0.216
 			self.properties.output_size_y = 0.356
-			self.properties.margin_top = 0.029
+			self.properties.margin_top = 0.031
 			self.properties.margin_bottom = 0.015
 			self.properties.margin_right = 0.010
 			self.properties.margin_left = 0.021
