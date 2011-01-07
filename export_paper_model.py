@@ -1447,7 +1447,7 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 		elif self.properties.default_paper_select == "7":
 			self.properties.output_size_x = 0.216
 			self.properties.output_size_y = 0.356
-			self.properties.margin_top = 0.029
+			self.properties.margin_top = 0.031
 			self.properties.margin_bottom = 0.015
 			self.properties.margin_right = 0.010
 			self.properties.margin_left = 0.021
