@@ -148,7 +148,7 @@ class Unfolder:
 			self.mesh.save_image(filepath, page_size * ppm)
 			#revoke settings
 			bpy.context.scene.render.use_bake_selected_to_active=selected_to_active
-		svg=SVG(page_size * ppm, properties.output_pure)
+		svg=SVG(page_size * ppm, properties.output_pure, properties.default_paper_select)
 		svg.add_mesh(self.mesh)
 		svg.write(filepath)
 
@@ -1232,13 +1232,14 @@ class Sticker(UVFace):
 
 class SVG:
 	"""Simple SVG exporter"""
-	def __init__(self, page_size_pixels:M.Vector, pure_net=True):
+	def __init__(self, page_size_pixels:M.Vector, pure_net=True, reg_mark="0"):
 		"""Initialize document settings.
 		page_size_pixels: document dimensions in pixels
 		pure_net: if True, do not use image"""
 		self.page_size = page_size_pixels
 		self.scale = page_size_pixels.y
 		self.pure_net = pure_net
+		self.reg_mark = reg_mark
 	def add_mesh(self, mesh):
 		"""Set the Mesh to process."""
 		self.mesh=mesh
@@ -1321,7 +1322,8 @@ class SVG:
 """)
 					f.write("    <image x='0' y='0' width='" + str(self.page_size.x) + "' height='" + str(self.page_size.y) + "' xlink:href='file://" + filename + "_" + page.name + ".png'/>\n")
 					f.write("  </g>\n")
-				f.write("""  <g
+				if self.reg_mark == "5" or self.reg_mark == "6" or self.reg_mark == "7":
+					f.write("""  <g
      inkscape:label="RegMarks"
      inkscape:groupmode="layer"
      id="layer2"
