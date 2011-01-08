@@ -316,11 +316,14 @@ class Mesh:
 				#TODO alpharesearch: need to add second sticker layer
 				if uvedge_priority(edge.uvedges[0]) >= uvedge_priority(edge.uvedges[1]):
 					edge.uvedges[0].island.add(Sticker(edge.uvedges[0], default_width))
+					edge.uvedges[0].set_sticker(True)
 				else:
 					edge.uvedges[1].island.add(Sticker(edge.uvedges[1], default_width))
+					edge.uvedges[1].set_sticker(True)
 			if len(edge.uvedges) > 2:
 				for additional_uvedge in edge.uvedges[2:]:
 					additional_uvedge.island.add(Sticker(additional_uvedge, default_width))
+					additional_uvedge.set_sticker(True)
 	
 	def finalize_islands(self, do_split_islands=True, scale_factor=1):
 		for island in self.islands:
@@ -1035,6 +1038,7 @@ class UVEdge:
 		self.vb=vertex2
 		self.island=island
 		island.edges.append(self)
+		self.has_main_sticker=False
 		if edge:
 			self.edge=edge
 			edge.uvedges.append(self)
@@ -1050,6 +1054,12 @@ class UVEdge:
 			return self.edge.index > other.edge.index
 		else:
 			return True
+	def has_sticker(self):
+		"""True if it has a sticker"""
+		return self.has_main_sticker
+	def set_sticker(self, sticker):
+		"""Set if it has a sticker"""
+		self.has_main_sticker = sticker
 
 class UVFace:
 	"""Face in 2D"""
@@ -1318,6 +1328,7 @@ class SVG:
     path {fill:none; stroke-width:1px; stroke-linecap:square; stroke-linejoin:bevel; stroke-dasharray:none}
     path.concave {stroke:#000; stroke-dasharray:8,4,2,4; stroke-dashoffset:0}
     path.convex {stroke:#000; stroke-dasharray:4,8; stroke-dashoffset:0}
+    path.obj {stroke:#000; stroke-dasharray:none}
     path.outer {stroke:#000; stroke-dasharray:none; stroke-width:1.5px}
     path.background {stroke:#fff}
     path.outer_background {stroke:#fff; stroke-width:2px}
@@ -1425,8 +1436,10 @@ class SVG:
 						#FIXME: The following clause won't return correct results for uncut edges with more than two faces connected
 						if uvedge.edge.is_cut(uvedge.uvface.face):
 							data_outer += data_uvedge
-							obj_solid += data_uvedge
-							obj_dash += data_uvedge
+							if uvedge.has_sticker():
+								obj_dash += data_uvedge
+							else:
+								obj_solid += data_uvedge
 						else:
 							if uvedge.va.vertex.index > uvedge.vb.vertex.index: #each edge is in two opposite-oriented variants; we want to add each only once
 								angle = uvedge.edge.angles[uvedge.uvface.face]
@@ -1460,7 +1473,7 @@ class SVG:
     inkscape:groupmode="layer"
     id="layer5"
     inkscape:label="object outline"
-    style="display:inline">
+    style="display:none">
 """)
 					if data_outer: 
 						if not self.pure_net:
@@ -1484,7 +1497,7 @@ class SVG:
     inkscape:label="object solid"
     style="display:inline">
 """)
-					if obj_solid: f.write("  <path class='outer' d='" + obj_solid + "'/>\n")
+					if obj_solid: f.write("  <path class='obj' d='" + obj_solid + "'/>\n")
 					f.write("  </g>\n")
 					f.write("""  <g
     inkscape:groupmode="layer"
