@@ -57,11 +57,13 @@ lines=[]
 twisted_quads=[]
 
 strf="{:.1f}".format
+
 def sign(a):
 	"""Return -1 for negative numbers, 1 for positive and 0 for zero."""
 	if a == 0:
 		return 0
 	return a/abs(a)
+
 def vectavg(vectlist):
 	"""Vector average of given list."""
 	if len(vectlist)==0:
@@ -77,6 +79,7 @@ def vectavg(vectlist):
 		for vect in vectlist:
 			vect_sum+=vect
 	return vect_sum/vectlist.__len__()
+
 def angle2d(direction):
 	"""Get the view angle of point from origin."""
 	if direction.length==0:
@@ -87,6 +90,7 @@ def angle2d(direction):
 	if direction[1]<0:
 		angle=2*pi-angle #hack for angles greater than pi
 	return angle
+
 def pairs(sequence):
 	"""Generate consequent pairs throughout the given sequence; at last, it gives elements last, first."""
 	i=iter(sequence)
@@ -95,6 +99,7 @@ def pairs(sequence):
 		yield previous, this
 		previous=this
 	yield this, first
+
 def z_up_matrix(n):
 	"""Get a rotation matrix that aligns given vector upwards."""
 	b=n.xy.length
@@ -547,6 +552,7 @@ class Vertex:
 					return False
 				break
 		return False #just in case
+
 class CutTree:
 	"""Optimisation for finding connections in cut edges"""
 	def __init__(self, edge):
@@ -579,6 +585,7 @@ class CutTree:
 				other.join(self)
 		else:
 			pass#print("Join myself")
+
 class CutPriority:
 	"""A container for edge's priority value"""
 	def __init__(self, angle, rel_length):
@@ -609,6 +616,7 @@ class CutPriority:
 		if not self.is_cut_end:
 			self.value+=priority_effect['cut_end']
 			self.is_cut_end=True
+
 class Edge:
 	"""Wrapper for BPy Edge"""
 	def __init__(self, edge, mesh, matrix=1):
@@ -789,6 +797,7 @@ class Face:
 		return "Face id: "+str(self.index)
 	def __repr__(self):
 		return "Face(id="+str(self.index)+"...)"
+
 class Island:
 	def __init__(self, faces=None, origin=None, uvfaces=None):
 		"""Find an island in the given set of Faces or UVFaces.
@@ -991,6 +1000,7 @@ class Page:
 		self.name="page"+str(num)
 	def add(self, island):
 		self.islands.append(island)
+
 class UVVertex:
 	"""Vertex in 2D"""
 	def __init__(self, vector, vertex=None):
@@ -1017,6 +1027,7 @@ class UVVertex:
 		return "UV "+str(self.vertex.index)+" ["+strf(self.co.x)+", "+strf(self.co.y)+"]"
 	def __repr__(self):
 		return str(self)
+
 class UVEdge:
 	"""Edge in 2D"""
 	def __init__(self, vertex1:UVVertex, vertex2:UVVertex, island:Island, uvface, edge:Edge=None):
@@ -1284,7 +1295,7 @@ class SVG:
      inkscape:cx="735"
      inkscape:cy="520"
      inkscape:document-units="px"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer9"
      showgrid="false"
      inkscape:window-width="640"
      inkscape:window-height="480"
@@ -1329,12 +1340,10 @@ class SVG:
      inkscape:groupmode="layer"
      id="layer2"
 """)
-				if self.reg_mark == "5": f.write("       transform='translate(0.34375,-0.35648928)'\n") #A4
-				elif self.reg_mark == "6": f.write("     transform='translate(0.34375,-62.718738)'\n") #letter
-				elif self.reg_mark == "7": f.write("     transform='translate(0.34375,-62.718738)'\n") #legal 310mm
-				f.write("""
-     transform="translate(0.34375,-62.718738)"
-     style="display:none"
+					if self.reg_mark == "5": f.write("       transform='translate(0.34375,-0.35648928)'\n") #A4
+					elif self.reg_mark == "6": f.write("     transform='translate(0.34375,-62.718738)'\n") #letter
+					elif self.reg_mark == "7": f.write("     transform='translate(0.34375,-62.718738)'\n") #legal 310mm
+					f.write("""     style="display:none"
      sodipodi:insensitive="true">
     <path
        style="fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -1361,10 +1370,10 @@ class SVG:
     <path
        style="fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
 """)
-				if self.reg_mark == "5": f.write("       d='m 52.805856,166.8919 0,-70.866141 70.866144,0'\n") #A4 240mm
-				elif self.reg_mark == "6": f.write("       d='m 52.805856,237.58488 0,-70.86614 70.866144,0'\n") #letter 260mm
-				elif self.reg_mark == "7": f.write("       d='m 52.805856,243.42743 0,-70.86614 70.866144,0'\n") #legal 310mm
-				f.write("""       id="path3867"
+					if self.reg_mark == "5": f.write("       d='m 52.805856,166.8919 0,-70.866141 70.866144,0'\n") #A4 240mm
+					elif self.reg_mark == "6": f.write("       d='m 52.805856,237.58488 0,-70.86614 70.866144,0'\n") #letter 260mm
+					elif self.reg_mark == "7": f.write("       d='m 52.805856,243.42743 0,-70.86614 70.866144,0'\n") #legal 310mm
+					f.write("""       id="path3867"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1410,12 +1419,14 @@ class SVG:
 					#debug: bounding box
 					#f.write("<rect x='"+str(island.pos.x*self.size)+"' y='"+str(self.page_size.y-island.pos.y*self.size-island.bounding_box.y*self.size)+"' width='"+str(island.bounding_box.x*self.size)+"' height='"+str(island.bounding_box.y*self.size)+"' />")
 					line_through = " L ".join
-					data_outer = data_convex = data_concave = data_stickers = ""
+					data_outer = data_convex = data_concave = data_stickers = obj_solid = obj_dash =""
 					for uvedge in island.edges:
 						data_uvedge = "\n    M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in [uvedge.va, uvedge.vb]])
 						#FIXME: The following clause won't return correct results for uncut edges with more than two faces connected
 						if uvedge.edge.is_cut(uvedge.uvface.face):
 							data_outer += data_uvedge
+							obj_solid += data_uvedge
+							obj_dash += data_uvedge
 						else:
 							if uvedge.va.vertex.index > uvedge.vb.vertex.index: #each edge is in two opposite-oriented variants; we want to add each only once
 								angle = uvedge.edge.angles[uvedge.uvface.face]
@@ -1457,8 +1468,38 @@ class SVG:
 						f.write("  <path class='outer' d='" + data_outer + "'/>\n")
 					if not self.pure_net and (data_convex or data_concave):
 						f.write("  <path class='background' d='" + data_convex + data_concave + "'/>\n")
+					f.write("  </g>\n")
+					f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer6"
+    inkscape:label="object inside"
+    style="display:inline">
+""")
 					if data_convex: f.write("  <path class='convex' d='" + data_convex+"'/>\n")
 					if data_concave: f.write("  <path class='concave' d='" + data_concave+"'/>\n")
+					f.write("  </g>\n")
+					f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer7"
+    inkscape:label="object solid"
+    style="display:inline">
+""")
+					if obj_solid: f.write("  <path class='outer' d='" + obj_solid + "'/>\n")
+					f.write("  </g>\n")
+					f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer8"
+    inkscape:label="object dash"
+    style="display:inline">
+""")
+					if obj_dash: f.write("  <path class='convex' d='" + obj_dash + "'/>\n")
+					f.write("  </g>\n")
+				f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer9"
+    inkscape:label="user"
+    style="display:inline">
+""")
 				f.write("  </g>\n")
 				f.write("</svg>\n")
 				f.close()
