@@ -139,21 +139,22 @@ class Unfolder:
 		filepath=properties.filepath
 		if filepath[-4:]==".svg" or filepath[-4:]==".png":
 			filepath=filepath[0:-4]
-		page_size = M.Vector((properties.output_size_x, properties.output_size_y)) #real page size in meters FIXME: must be scaled according to unit settings ?
+		outputpage_size = M.Vector((properties.output_size_x, properties.output_size_y)) #real page size in meters FIXME: must be scaled according to unit settings ?
+		innerpage_size = M.Vector((properties.output_size_x-properties.margin_left-properties.margin_right, properties.output_size_y-properties.margin_top-properties.margin_bottom)) 
 		scale = bpy.context.scene.unit_settings.scale_length * properties.model_scale
 		ppm = properties.output_dpi * 100 / 2.54 #points per meter
-		self.mesh.generate_stickers(default_width = properties.sticker_width * page_size.y / scale)
+		self.mesh.generate_stickers(default_width = properties.sticker_width * innerpage_size.y / scale)
 		#Scale everything so that page height is 1
-		self.mesh.finalize_islands(scale_factor = scale / page_size.y)
-		self.mesh.fit_islands(aspect_ratio = page_size.x / page_size.y)
+		self.mesh.finalize_islands(scale_factor = scale / innerpage_size.y)
+		self.mesh.fit_islands(aspect_ratio = innerpage_size.x / innerpage_size.y)
 		if not properties.output_pure:
-			self.mesh.save_uv(aspect_ratio = page_size.x / page_size.y)
+			self.mesh.save_uv(aspect_ratio = innerpage_size.x / innerpage_size.y)
 			#TODO: do we really need a switch of our own?
 			selected_to_active = bpy.context.scene.render.use_bake_selected_to_active; bpy.context.scene.render.use_bake_selected_to_active = properties.bake_selected_to_active
-			self.mesh.save_image(filepath, page_size * ppm)
+			self.mesh.save_image(filepath, innerpage_size * ppm)
 			#revoke settings
 			bpy.context.scene.render.use_bake_selected_to_active=selected_to_active
-		svg=SVG(page_size * ppm, properties.output_pure, properties.default_paper_select)
+		svg=SVG(outputpage_size * ppm, properties.output_pure, properties.default_paper_select, properties.margin_bottom * ppm, properties.margin_left * ppm, properties.margin_right * ppm, properties.margin_top* ppm)
 		svg.add_mesh(self.mesh)
 		svg.write(filepath)
 
@@ -1254,7 +1255,7 @@ class Sticker(UVFace):
 
 class SVG:
 	"""Simple SVG exporter"""
-	def __init__(self, page_size_pixels:M.Vector, pure_net=True, reg_mark="0"):
+	def __init__(self, page_size_pixels:M.Vector, pure_net=True, reg_mark="0", margin_bottom=0, margin_left=0, margin_right=0, margin_top=0):
 		"""Initialize document settings.
 		page_size_pixels: document dimensions in pixels
 		pure_net: if True, do not use image"""
@@ -1262,6 +1263,10 @@ class SVG:
 		self.scale = page_size_pixels.y
 		self.pure_net = pure_net
 		self.reg_mark = reg_mark
+		self.margin_bottom = margin_bottom
+		self.margin_left = margin_left
+		self.margin_right = margin_right
+		self.margin_top = margin_top
 	def add_mesh(self, mesh):
 		"""Set the Mesh to process."""
 		self.mesh=mesh
@@ -1341,8 +1346,9 @@ class SVG:
     inkscape:groupmode="layer"
     id="layer1"
     inkscape:label="background"
-    style="display:inline">
+    style="display:inline"
 """)
+					f.write("    transform='translate("+str(self.margin_right)+",-"+str(self.margin_bottom)+")'>\n")
 					f.write("    <image x='0' y='0' width='" + str(self.page_size.x) + "' height='" + str(self.page_size.y) + "' xlink:href='file://" + filename + "_" + page.name + ".png'/>\n")
 					f.write("  </g>\n")
 				if self.reg_mark == "5" or self.reg_mark == "6" or self.reg_mark == "7":
@@ -1581,7 +1587,7 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 	output_pure = bpy.props.BoolProperty(name="Pure Net", description="Do not bake the bitmap", default=True)
 	bake_selected_to_active = bpy.props.BoolProperty(name="Selected to Active", description="Bake selected to active (if not exporting pure net)", default=True)
 	sticker_width = bpy.props.FloatProperty(name="Tab Size", description="Width of gluing tabs", default=0.005, soft_min=0, soft_max=0.05, precision=3, step=0.01, subtype="UNSIGNED", unit="LENGTH")
-	model_scale = bpy.props.FloatProperty(name="Scale", description="Coefficient of all dimensions when exporting", default=0.03, soft_min=0.001 ,soft_max=10, precision=3, step=0.01, subtype="FACTOR")
+	model_scale = bpy.props.FloatProperty(name="Scale", description="Coefficient of all dimensions when exporting", default=0.029, soft_min=0.001 ,soft_max=10, precision=3, step=0.01, subtype="FACTOR")
 	unfolder=None
 	largest_island_ratio=0
 	
@@ -1673,7 +1679,7 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 		layout.prop(self.properties, "output_dpi")
 		layout.label(text="Model scale:")
 		layout.prop(self.properties, "model_scale")
-		scale_ratio = self.unfolder.mesh.largest_island_ratio(M.Vector((self.properties.output_size_x, self.properties.output_size_y))) * self.properties.model_scale
+		scale_ratio = self.unfolder.mesh.largest_island_ratio(M.Vector(((self.properties.output_size_x-self.properties.margin_left-self.properties.margin_right), (self.properties.output_size_y-self.properties.margin_top-self.properties.margin_bottom)))) * self.properties.model_scale
 		if scale_ratio > 1:
 			layout.label(text="An island is "+strf(scale_ratio)+"x bigger than page", icon="ERROR")
 		elif scale_ratio > 0:
