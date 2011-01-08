@@ -154,7 +154,7 @@ class Unfolder:
 			self.mesh.save_image(filepath, innerpage_size * ppm)
 			#revoke settings
 			bpy.context.scene.render.use_bake_selected_to_active=selected_to_active
-		svg=SVG(outputpage_size * ppm, properties.output_pure, properties.default_paper_select, properties.margin_bottom * ppm, properties.margin_left * ppm, properties.margin_right * ppm, properties.margin_top* ppm)
+		svg=SVG(outputpage_size * ppm, innerpage_size * ppm, properties.output_pure, properties.default_paper_select, properties.margin_bottom * ppm, properties.margin_left * ppm, properties.margin_right * ppm, properties.margin_top* ppm)
 		svg.add_mesh(self.mesh)
 		svg.write(filepath, properties.filename)
 
@@ -1252,12 +1252,12 @@ class Sticker(UVFace):
 
 class SVG:
 	"""Simple SVG exporter"""
-	def __init__(self, page_size_pixels:M.Vector, pure_net=True, reg_mark="0", margin_bottom=0, margin_left=0, margin_right=0, margin_top=0):
+	def __init__(self, page_size_pixels:M.Vector, page_inner_pixels:M.Vector, pure_net=True, reg_mark="0", margin_bottom=0, margin_left=0, margin_right=0, margin_top=0):
 		"""Initialize document settings.
 		page_size_pixels: document dimensions in pixels
 		pure_net: if True, do not use image"""
 		self.page_size = page_size_pixels
-		self.scale = page_size_pixels.y
+		self.scale = page_inner_pixels.y
 		self.pure_net = pure_net
 		self.reg_mark = reg_mark
 		self.margin_bottom = margin_bottom
@@ -1270,7 +1270,7 @@ class SVG:
 	def format_vertex(self, vector, rot=1, pos=M.Vector((0,0))):
 		"""Return a string with both coordinates of the given vertex."""
 		vector=vector*rot+pos
-		return str(vector.x*self.scale) + " " + str((1-vector.y)*self.scale)
+		return str(((vector.x*self.scale)+self.margin_left)) + " " + str(((1-vector.y)*self.scale)+self.margin_top)
 	def write(self, filepathname, filename):
 		"""Write data to a file given by its name."""
 		filename = filename.replace(".svg","")
@@ -1348,11 +1348,11 @@ class SVG:
     inkscape:label="background"
     style="display:inline">
 """)
-					f.write("    <image x='"+ str(self.margin_right) 
+					f.write("    <image x='"+ str(self.margin_left) 
 									+"' y='"+ str(self.margin_top) 
 									+"' width='" + str(self.page_size.x-self.margin_right-self.margin_left) 
 								   + "' height='" + str(self.page_size.y-self.margin_top-self.margin_bottom) 
-								   + "' xlink:href='" + filename + "_" + page.name + ".png'/>\n")
+								   + "' xlink:href='file://" + filepathname + "_" + page.name + ".png'/>\n")  #+ "' xlink:href='" + filename + "_" + page.name + ".png'/>\n")
 					f.write("  </g>\n")
 				if self.reg_mark == "5" or self.reg_mark == "6" or self.reg_mark == "7":
 					f.write("""  <g
@@ -1654,24 +1654,24 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 		elif self.properties.default_paper_select == "5":
 			self.properties.output_size_x = 0.210
 			self.properties.output_size_y = 0.297
-			self.properties.margin_top = 0.027
-			self.properties.margin_bottom = 0.015
-			self.properties.margin_right = 0.015
-			self.properties.margin_left = 0.010
+			self.properties.margin_top = 0.029
+			self.properties.margin_bottom = 0.012
+			self.properties.margin_right = 0.017
+			self.properties.margin_left = 0.017
 		elif self.properties.default_paper_select == "6":
 			self.properties.output_size_x = 0.216
 			self.properties.output_size_y = 0.279
-			self.properties.margin_top = 0.029
-			self.properties.margin_bottom = 0.015
-			self.properties.margin_right = 0.021
-			self.properties.margin_left = 0.010
+			self.properties.margin_top = 0.031
+			self.properties.margin_bottom = 0.012
+			self.properties.margin_right = 0.023
+			self.properties.margin_left = 0.017
 		elif self.properties.default_paper_select == "7":
 			self.properties.output_size_x = 0.216
 			self.properties.output_size_y = 0.356
-			self.properties.margin_top = 0.031
-			self.properties.margin_bottom = 0.015
-			self.properties.margin_right = 0.021
-			self.properties.margin_left = 0.010
+			self.properties.margin_top = 0.033
+			self.properties.margin_bottom = 0.012
+			self.properties.margin_right = 0.023
+			self.properties.margin_left = 0.017
 		col.prop(self.properties, "default_paper_select")
 		col.prop(self.properties, "output_size_x")
 		col.prop(self.properties, "output_size_y")
