@@ -156,7 +156,7 @@ class Unfolder:
 			bpy.context.scene.render.use_bake_selected_to_active=selected_to_active
 		svg=SVG(outputpage_size * ppm, properties.output_pure, properties.default_paper_select, properties.margin_bottom * ppm, properties.margin_left * ppm, properties.margin_right * ppm, properties.margin_top* ppm)
 		svg.add_mesh(self.mesh)
-		svg.write(filepath)
+		svg.write(filepath, properties.filename)
 
 class Mesh:
 	"""Wrapper for Bpy Mesh"""
@@ -317,14 +317,14 @@ class Mesh:
 				#TODO alpharesearch: need to add second sticker layer
 				if uvedge_priority(edge.uvedges[0]) >= uvedge_priority(edge.uvedges[1]):
 					edge.uvedges[0].island.add(Sticker(edge.uvedges[0], default_width))
-					edge.uvedges[0].set_sticker(True)
+					edge.uvedges[0].has_main_sticker = True
 				else:
 					edge.uvedges[1].island.add(Sticker(edge.uvedges[1], default_width))
-					edge.uvedges[1].set_sticker(True)
+					edge.uvedges[1].has_main_sticker = True
 			if len(edge.uvedges) > 2:
 				for additional_uvedge in edge.uvedges[2:]:
 					additional_uvedge.island.add(Sticker(additional_uvedge, default_width))
-					additional_uvedge.set_sticker(True)
+					additional_uvedge.has_main_sticker = True
 	
 	def finalize_islands(self, do_split_islands=True, scale_factor=1):
 		for island in self.islands:
@@ -1058,9 +1058,6 @@ class UVEdge:
 	def has_sticker(self):
 		"""True if it has a sticker"""
 		return self.has_main_sticker
-	def set_sticker(self, sticker):
-		"""Set if it has a sticker"""
-		self.has_main_sticker = sticker
 
 class UVFace:
 	"""Face in 2D"""
@@ -1274,10 +1271,11 @@ class SVG:
 		"""Return a string with both coordinates of the given vertex."""
 		vector=vector*rot+pos
 		return str(vector.x*self.scale) + " " + str((1-vector.y)*self.scale)
-	def write(self, filename):
+	def write(self, filepathname, filename):
 		"""Write data to a file given by its name."""
+		filename = filename.replace(".svg","")
 		for num, page in enumerate(self.mesh.pages):
-			with open(filename+"_"+page.name+".svg", 'w') as f:
+			with open(filepathname+"_"+page.name+".svg", 'w') as f:
 				f.write("""<?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!-- Created with Export-Paper-Model-from-Blender (https://github.com/addam/Export-Paper-Model-from-Blender) -->
 
@@ -1296,7 +1294,9 @@ class SVG:
 				f.write("""   id="svg2"
    version="1.1"
    inkscape:version="0.48.0 r9654"
-   sodipodi:docname="drawing.svg">
+   sodipodi:docname='""")
+				f.write(filename+"_"+page.name+".svg")
+				f.write("""'>\n"
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -1346,10 +1346,13 @@ class SVG:
     inkscape:groupmode="layer"
     id="layer1"
     inkscape:label="background"
-    style="display:inline"
+    style="display:inline">
 """)
-					f.write("    transform='translate("+str(self.margin_right)+",-"+str(self.margin_bottom)+")'>\n")
-					f.write("    <image x='0' y='0' width='" + str(self.page_size.x) + "' height='" + str(self.page_size.y) + "' xlink:href='file://" + filename + "_" + page.name + ".png'/>\n")
+					f.write("    <image x='"+ str(self.margin_right) 
+									+"' y='"+ str(self.margin_top) 
+									+"' width='" + str(self.page_size.x-self.margin_right-self.margin_left) 
+								   + "' height='" + str(self.page_size.y-self.margin_top-self.margin_bottom) 
+								   + "' xlink:href='" + filename + "_" + page.name + ".png'/>\n")
 					f.write("  </g>\n")
 				if self.reg_mark == "5" or self.reg_mark == "6" or self.reg_mark == "7":
 					f.write("""  <g
@@ -1653,22 +1656,22 @@ class EXPORT_OT_paper_model(bpy.types.Operator):
 			self.properties.output_size_y = 0.297
 			self.properties.margin_top = 0.027
 			self.properties.margin_bottom = 0.015
-			self.properties.margin_right = 0.010
-			self.properties.margin_left = 0.015
+			self.properties.margin_right = 0.015
+			self.properties.margin_left = 0.010
 		elif self.properties.default_paper_select == "6":
 			self.properties.output_size_x = 0.216
 			self.properties.output_size_y = 0.279
 			self.properties.margin_top = 0.029
 			self.properties.margin_bottom = 0.015
-			self.properties.margin_right = 0.010
-			self.properties.margin_left = 0.021
+			self.properties.margin_right = 0.021
+			self.properties.margin_left = 0.010
 		elif self.properties.default_paper_select == "7":
 			self.properties.output_size_x = 0.216
 			self.properties.output_size_y = 0.356
 			self.properties.margin_top = 0.031
 			self.properties.margin_bottom = 0.015
-			self.properties.margin_right = 0.010
-			self.properties.margin_left = 0.021
+			self.properties.margin_right = 0.021
+			self.properties.margin_left = 0.010
 		col.prop(self.properties, "default_paper_select")
 		col.prop(self.properties, "output_size_x")
 		col.prop(self.properties, "output_size_y")
