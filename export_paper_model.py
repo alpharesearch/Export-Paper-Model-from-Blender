@@ -1345,7 +1345,7 @@ class SVG:
 					f.write("""  <g
     inkscape:groupmode="layer"
     id="layer1"
-    inkscape:label="background"
+    inkscape:label="texture"
     style="display:inline">
 """)
 					f.write("    <image x='"+ str(self.margin_left) 
@@ -1434,7 +1434,16 @@ class SVG:
        transform="matrix(0.7570818,0,0,0.75708471,43.235358,291.4589)" />
   </g>
 """)
+				i = 0
 				for island in page.islands:
+					i = i + 1
+					f.write("""  <g
+    inkscape:groupmode="layer"
+""")
+					f.write("    id='layer3"+str(i)+"'\n") #A4 240mm
+					f.write("    inkscape:label='object-"+str(i)+"'\n") #letter 260mm
+					f.write("""    style="display:inline">
+""")
 					rot = M.Matrix.Rotation(island.angle, 2)
 					#debug: bounding box
 					#f.write("<rect x='"+str(island.pos.x*self.size)+"' y='"+str(self.page_size.y-island.pos.y*self.size-island.bounding_box.y*self.size)+"' width='"+str(island.bounding_box.x*self.size)+"' height='"+str(island.bounding_box.y*self.size)+"' />")
@@ -1463,7 +1472,13 @@ class SVG:
 						f.write("""  <g
     inkscape:groupmode="layer"
     id="layer3"
-    inkscape:label="stickers closed"
+    inkscape:label="tabs"
+    style="display:inline">
+""")
+						f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer3"
+    inkscape:label="closed"
     style="display:none">
 """)
 						for sticker in island.stickers: #Stickers are separate paths in one group
@@ -1472,16 +1487,17 @@ class SVG:
 						f.write("""  <g
     inkscape:groupmode="layer"
     id="layer4"
-    inkscape:label="stickers open"
+    inkscape:label="open"
     style="display:inline">
 """)
 						for sticker in island.stickers: #Stickers are separate paths in one group
 							f.write("  <path class='sticker' d='M " + line_through([self.format_vertex(vertex.co, rot, island.pos + island.offset) for vertex in sticker.verts]) + " '/>\n")
 						f.write("  </g>\n")
+						f.write("  </g>\n")
 					f.write("""  <g
     inkscape:groupmode="layer"
     id="layer5"
-    inkscape:label="object outline"
+    inkscape:label="outline"
     style="display:none">
 """)
 					if data_outer: 
@@ -1494,7 +1510,7 @@ class SVG:
 					f.write("""  <g
     inkscape:groupmode="layer"
     id="layer6"
-    inkscape:label="object inside"
+    inkscape:label="inside"
     style="display:inline">
 """)
 					if data_convex: f.write("  <path class='convex' d='" + data_convex+"'/>\n")
@@ -1503,7 +1519,13 @@ class SVG:
 					f.write("""  <g
     inkscape:groupmode="layer"
     id="layer7"
-    inkscape:label="object solid"
+    inkscape:label="cut line"
+    style="display:inline">
+""")
+					f.write("""  <g
+    inkscape:groupmode="layer"
+    id="layer7"
+    inkscape:label="solid"
     style="display:inline">
 """)
 					if obj_solid: f.write("  <path class='obj' d='" + obj_solid + "'/>\n")
@@ -1511,10 +1533,12 @@ class SVG:
 					f.write("""  <g
     inkscape:groupmode="layer"
     id="layer8"
-    inkscape:label="object dash"
+    inkscape:label="dash"
     style="display:inline">
 """)
 					if obj_dash: f.write("  <path class='convex' d='" + obj_dash + "'/>\n")
+					f.write("  </g>\n")
+					f.write("  </g>\n")
 					f.write("  </g>\n")
 				f.write("""  <g
     inkscape:groupmode="layer"
